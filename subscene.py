@@ -1,4 +1,3 @@
-#! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 # vim: fenc=utf-8 ts=4 et sw=4 sts=4
 
@@ -27,8 +26,16 @@ this script that does the job by parsing the website"s pages.
 # imports
 import re
 import enum
-from contextlib import suppress
-from urllib.request import Request, urlopen
+import sys
+
+is_PY2 = sys.version_info[0] < 3
+if is_PY2:
+    from contextlib2 import suppress
+    from urllib2 import Request, urlopen
+else:
+    from contextlib import suppress
+    from urllib2.request import Request, urlopen
+
 from bs4 import BeautifulSoup
 
 # constants
@@ -48,7 +55,7 @@ def soup_for(url):
     return BeautifulSoup(html, "html.parser")
 
 
-class AttrDict():
+class AttrDict(object):
     def __init__(self, *attrs):
         self._attrs = attrs
 
@@ -76,7 +83,7 @@ SectionsParts = {
 }
 
 
-class Subtitle:
+class Subtitle(object):
     def __init__(self, title, url, language, owner_username, owner_url,
                  description):
         self.title = title
@@ -140,7 +147,7 @@ class Subtitle:
         return self._zipped_url
 
 
-class Film:
+class Film(object):
     def __init__(self, title, year=None, imdb=None, cover=None,
                  subtitles=None):
         self.title = title
